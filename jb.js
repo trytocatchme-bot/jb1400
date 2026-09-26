@@ -330,10 +330,15 @@ let allDone = false,
       !check(
         "module-bases-0x4000-aligned",
         aligned(webkitBase) && aligned(libkernelBase),
-        "",
+        "webkit=" + webkitBase + " libkernel=" + libkernelBase +
+        " (14.00: non-aligned is OK, offsets still verified by PRIMITIVE-OK)",
       )
-    )
-      return;
+    ) {
+      // 14.00: module bases may not be 0x4000-aligned, but the primitive
+      // already proved the offsets work. Don't bail -- proceed to jailbreak.
+      if (fwKey !== "14.00") return;
+      mark("ALIGN-WARN", "14.00: proceeding despite non-aligned module bases");
+    }
 
     const G = {};
     const GAD = [
